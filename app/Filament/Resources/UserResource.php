@@ -30,9 +30,9 @@ class UserResource extends Resource
                     ->email()
                     ->required()
                     ->maxLength(255),
-                // Forms\Components\Select::make('role')
-                //     ->options(User::ROLES)
-                //     ->required(),
+                Forms\Components\Select::make('role')
+                    ->options(User::ROLES)
+                    ->required(),
             ]);
     }
 
@@ -40,7 +40,7 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
-                 Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
@@ -52,12 +52,12 @@ class UserResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('role')
-                //     ->sortable()
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('role')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
-                Tables\Filters\TrashedFilter::make(),
+                //
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
@@ -83,13 +83,5 @@ class UserResource extends Resource
             'create' => Pages\CreateUser::route('/create'),
             'edit' => Pages\EditUser::route('/{record}/edit'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 }

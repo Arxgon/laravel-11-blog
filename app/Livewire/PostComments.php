@@ -7,6 +7,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\Validate;
 
 class PostComments extends Component
 {
@@ -14,7 +15,7 @@ class PostComments extends Component
 
     public Post $post;
 
-    #[Rule('required|min:3|max:200')]
+    #[Validate('required|min:3|max:200')]
     public string $comment;
 
     public function postComment()

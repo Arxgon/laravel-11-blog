@@ -23,6 +23,7 @@ use Filament\Forms\Components\DateTimePicker;
 use App\Filament\Resources\PostResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\PostResource\RelationManagers;
+use App\Filament\Resources\PostResource\RelationManagers\CommentsRelationManager;
 
 class PostResource extends Resource
 {
@@ -38,7 +39,11 @@ class PostResource extends Resource
                     [
                         TextInput::make('title')
                             ->live()
-                            ->required()->minLength(1)->maxLength(150)
+                            ->required()
+                            ->minLength(1)
+                            ->maxLength(150)
+                            ->debounce(600)
+                            ->autocomplete('off')
                             ->afterStateUpdated(function (string $operation, $state, Forms\Set $set) {
                                 if ($operation === 'edit') {
                                     return;
@@ -55,7 +60,9 @@ class PostResource extends Resource
                 Section::make('Meta')->schema(
                     [
                         FileUpload::make('image')->image()->directory('posts/thumbnails'),
-                        DateTimePicker::make('published_at')->nullable(),
+                        DateTimePicker::make('published_at')
+                        ->nullable()
+                        ->default(now()),
                         Checkbox::make('featured'),
                         Select::make('user_id')
                             ->relationship('author', 'name')
@@ -99,7 +106,7 @@ class PostResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CommentsRelationManager::class
         ];
     }
 
